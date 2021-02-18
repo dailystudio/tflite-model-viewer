@@ -79,13 +79,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    aaptOptions {
+        noCompress "tflite"
+    }
+
     buildFeatures {
         mlModelBinding true
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'org.tensorflow:tensorflow-lite-support:0.1.0-rc1'
@@ -97,12 +103,11 @@ dependencies {
     implementation "com.facebook.stetho:stetho:${project.ext.stethoVersion}"
     implementation "com.rasalexman.kdispatcher:kdispatcher:${project.ext.kDispactherVersion}"
     implementation "com.nostra13.universalimageloader:universal-image-loader:${project.ext.imageLoaderVersion}"
-    implementation "com.squareup.retrofit2:retrofit:${project.ext.retrofitVersion}"
-    implementation "com.squareup.retrofit2:converter-gson:${project.ext.retrofitVersion}"
 
     implementation "com.dailystudio:devbricksx:${project.ext.devbricksxVersion}"
     implementation "com.dailystudio:devbricksx-java-annotations:${project.ext.devbricksxVersion}"
     implementation "com.dailystudio:devbricksx-kotlin-annotations:${project.ext.devbricksxVersion}"
+    implementation "com.dailystudio:tensorflow-lite-examples-common:${project.ext.tfliteExtCommonVersion}"
 
     kapt "com.dailystudio:devbricksx-java-compiler:${project.ext.devbricksxVersion}"
     kapt "com.dailystudio:devbricksx-kotlin-compiler:${project.ext.devbricksxVersion}"
