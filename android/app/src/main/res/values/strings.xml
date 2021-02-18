@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name_release">TensorFlow Lite Model Viewer</string>
+    <string name="app_name_debug">TensorFlow Lite Model Viewer (Debug)</string>
+</resources>
