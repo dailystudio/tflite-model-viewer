@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:background="@color/semi_black"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+
+    <ImageView
+        android:layout_gravity="center"
+        android:src="@drawable/tfl2_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/overflow_menu"
+        android:src="@drawable/ic_overflow"
+        android:tint="@color/overflow_button_tint"
+        android:layout_margin="@dimen/overflow_menu_margin"
+        android:layout_gravity="center_vertical|end"
+        android:layout_width="@dimen/overflow_menu_size"
+        android:layout_height="@dimen/overflow_menu_size" />
+
+</FrameLayout>

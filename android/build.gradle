@@ -2,16 +2,19 @@
 
 buildscript {
     ext.kotlin_version = '1.4.0'
+    ext.bintray_publish_version = '1.0.0'
+
     repositories {
         google()
         jcenter()
-        
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath "com.github.panpf.bintray-publish:bintray-publish:$bintray_publish_version"
     }
 }
 
@@ -19,10 +22,48 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url 'https://jitpack.io' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    // Jcenter publish credentials
+    if (file("private.properties").exists()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(file("private.properties")))
+        BINTRAY_KEY = props.getProperty('BINTRAY_KEY')
+        BINTRAY_USER = props.getProperty('BINTRAY_USER')
+    } else {
+        BINTRAY_KEY = ""
+        BINTRAY_USER = ""
+    }
+
+    // Compile Settings
+    COMPILE_SDK = 30
+    BUILD_TOOLS = '30.0.0'
+    VERSION_NAME = version()
+    VERSION_CODE = versionCode().toInteger()
+
+    DEVBRICKS_X_VERSION = '1.3.9'
+    ROOM_VERSION = '2.3.0-alpha04'
+}
+
+def String version() {
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    return versionProps['major'] + "." + versionProps['minor'] + "." + versionProps['patch']
+}
+
+def String versionCode() {
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    return versionProps['code']
 }

@@ -1,0 +1,79 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.github.panpf.bintray-publish'
+
+android {
+    compileSdkVersion COMPILE_SDK
+    buildToolsVersion BUILD_TOOLS
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField "boolean","USE_STETHO","false"
+        }
+
+        debug {
+            debuggable true
+
+            buildConfigField "boolean","USE_STETHO","true"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    api "com.facebook.stetho:stetho:${project.ext.stethoVersion}"
+    api "com.rasalexman.kdispatcher:kdispatcher:${project.ext.kDispactherVersion}"
+    api "com.nostra13.universalimageloader:universal-image-loader:${project.ext.imageLoaderVersion}"
+
+    api "com.dailystudio:devbricksx:${DEVBRICKS_X_VERSION}"
+    api "com.dailystudio:devbricksx-camera:${DEVBRICKS_X_VERSION}"
+    api "com.dailystudio:devbricksx-audio:${DEVBRICKS_X_VERSION}"
+    kapt "com.dailystudio:devbricksx-kotlin-compiler:${DEVBRICKS_X_VERSION}"
+
+    api("org.tensorflow:tensorflow-lite:${project.ext.tfliteVersion}") { changing = true }
+    api("org.tensorflow:tensorflow-lite-gpu:${project.ext.tfliteVersion}") { changing = true }
+    api("org.tensorflow:tensorflow-lite-support:${project.ext.tfliteSupportVersion}") { changing = true }
+    api("org.tensorflow:tensorflow-lite-metadata:${project.ext.tfliteMetadataVersion}") { changing = true }
+
+    // Test helpers
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "androidx.room:room-testing:${ROOM_VERSION}"
+}
+
+publish {
+    userOrg = 'dailystudio'
+    groupId = 'com.dailystudio'
+    artifactId = 'tensorflow-lite-viewer'
+    publishVersion = VERSION_NAME
+    desc = 'TensorFlow Lite Viewer Library'
+    bintrayUser = BINTRAY_USER
+    bintrayKey = BINTRAY_KEY
+    website = 'https://github.com/dailystudio/tflite-model-viewer'
+}
