@@ -15,19 +15,14 @@ import org.tensorflow.lite.support.label.Category
 class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
     : AbsTFLiteImageAnalyzer<ImageInferenceInfo, List<Category>>(rotation, lensFacing) {
 
-    private var classifier: LiteModelAiyVisionClassifierBirdsV13? = null
-
-    override fun analyzeFrame(
-        inferenceBitmap: Bitmap,
-        info: ImageInferenceInfo
-    ): List<Category>? {
-        if (classifier == null) {
-            val context = GlobalContextWrapper.context
-            context?.let {
-                classifier = LiteModelAiyVisionClassifierBirdsV13.newInstance(context)
-            }
+    private val classifier: LiteModelAiyVisionClassifierBirdsV13? by lazy {
+        GlobalContextWrapper.context?.let {
+            LiteModelAiyVisionClassifierBirdsV13.newInstance(it)
         }
+    }
 
+    override fun analyzeFrame(inferenceBitmap: Bitmap,
+                              info: ImageInferenceInfo): List<Category>? {
         val tImage = TensorImage.fromBitmap(inferenceBitmap)
 
         val categories = classifier?.process(tImage)?.probabilityAsCategoryList
@@ -63,7 +58,6 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
     }
 
 }
-
 
 class ImageClassifierCameraFragment
     : AbsTFLiteCameraFragment<ImageInferenceInfo, List<Category>>() {
