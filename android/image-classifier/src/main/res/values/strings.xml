@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name_release">TensorFlow Lite Model Viewer</string>
-    <string name="app_name_debug">TensorFlow Lite Model Viewer (Debug)</string>
+    <string name="app_name_release">Image Classifier Viewer</string>
+    <string name="app_name_debug">@string/app_name_release</string>
 </resources>

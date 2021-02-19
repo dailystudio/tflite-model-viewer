@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.dailystudio.tensorflow.lite.viewer.AbsTFLiteModelViewerActivity
 import com.dailystudio.tensorflow.lite.viewer.image.ImageInferenceInfo
-import com.dailystudio.tensorflow.lite.viewer.image.classifier.fragment.LiteModelViewerViewerCameraFragmentTFLite
+import com.dailystudio.tensorflow.lite.viewer.image.classifier.fragment.ImageClassifierCameraFragment
 import org.tensorflow.lite.support.label.Category
 import kotlin.math.min
 
@@ -22,7 +22,7 @@ class MainActivity : AbsTFLiteModelViewerActivity<ImageInferenceInfo, List<Categ
         Array(REPRESENTED_ITEMS_COUNT) {null}
 
     override fun createBaseFragment(): Fragment {
-        return LiteModelViewerViewerCameraFragmentTFLite()
+        return ImageClassifierCameraFragment()
     }
 
     override fun createResultsView(): View? {

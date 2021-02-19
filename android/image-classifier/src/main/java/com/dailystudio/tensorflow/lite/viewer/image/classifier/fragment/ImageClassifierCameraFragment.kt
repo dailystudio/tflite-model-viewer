@@ -7,11 +7,12 @@ import com.dailystudio.devbricksx.utils.MatrixUtils
 import com.dailystudio.tensorflow.lite.viewer.image.AbsTFLiteCameraFragment
 import com.dailystudio.tensorflow.lite.viewer.image.AbsTFLiteImageAnalyzer
 import com.dailystudio.tensorflow.lite.viewer.image.ImageInferenceInfo
+import com.dailystudio.tensorflow.lite.viewer.image.classifier.ml.LiteModelAiyVisionClassifierBirdsV13
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.label.Category
 
 
-class LiteModelTFLiteImageAnalyzer(rotation: Int, lensFacing: Int)
+class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
     : AbsTFLiteImageAnalyzer<ImageInferenceInfo, List<Category>>(rotation, lensFacing) {
 
     private var classifier: LiteModelAiyVisionClassifierBirdsV13? = null
@@ -64,11 +65,11 @@ class LiteModelTFLiteImageAnalyzer(rotation: Int, lensFacing: Int)
 }
 
 
-class LiteModelViewerViewerCameraFragmentTFLite
+class ImageClassifierCameraFragment
     : AbsTFLiteCameraFragment<ImageInferenceInfo, List<Category>>() {
 
     override fun createAnalyzer(screenAspectRatio: Int, rotation: Int, lensFacing: Int): AbsTFLiteImageAnalyzer<ImageInferenceInfo, List<Category>> {
-        return LiteModelTFLiteImageAnalyzer(rotation, lensFacing)
+        return ImageClassifierAnalyzer(rotation, lensFacing)
     }
 
 }

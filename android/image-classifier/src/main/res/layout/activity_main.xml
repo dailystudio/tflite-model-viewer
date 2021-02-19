@@ -8,7 +8,7 @@
     tools:context="com.dailystudio.tflite.classifier.com.dailystudio.tensorflow.lite.viewer.image.classifier.MainActivity">
 
     <fragment
-        android:name="com.dailystudio.tensorflow.lite.viewer.image.classifier.fragment.LiteModelViewerViewerCameraFragmentTFLite"
+        android:name="com.dailystudio.tensorflow.lite.viewer.image.classifier.fragment.ImageClassifierCameraFragment"
         android:id="@+id/fragment_viewer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
