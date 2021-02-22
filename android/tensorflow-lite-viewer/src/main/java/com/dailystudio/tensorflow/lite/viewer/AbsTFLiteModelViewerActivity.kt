@@ -295,7 +295,7 @@ abstract class AbsTFLiteModelViewerActivity<Info: InferenceInfo, Results> : DevB
     }
 
     protected open fun getViewerAppDesc(): CharSequence? {
-        return getString(R.string.default_example_desc)
+        return getString(R.string.default_viewer_app_desc)
     }
 
     protected open fun createSettingsFragment(): AbsSettingsDialogFragment? {

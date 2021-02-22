@@ -1,7 +1,7 @@
 <resources>
 
     <string name="default_app_name">TensorFlow Lite Examples</string>
-    <string name="default_example_desc">TensorFlow Lite is TensorFlo\'s lightweight solution for mobile and embedded devices. It enables low-latency inference of on-device machine learning models with a small binary size and fast performance supporting hardware acceleration.</string>
+    <string name="default_viewer_app_desc">TensorFlow Lite is TensorFlow\'s lightweight solution for mobile and embedded devices. It enables low-latency inference of on-device machine learning models with a small binary size and fast performance supporting hardware acceleration.</string>
 
     <string name="action_about">About</string>
     <string name="action_settings">Settings</string>
