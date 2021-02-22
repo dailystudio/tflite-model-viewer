@@ -26,21 +26,21 @@ import com.rasalexman.kdispatcher.unsubscribe
 
 abstract class AbsTFLiteModelViewerActivity<Info: InferenceInfo, Results> : DevBricksActivity() {
 
-    class AboutFragment(private val exampleName: CharSequence?,
-                        private val exampleIconResId: Int,
-                        private val exampleDesc: CharSequence?,
-                        private val exampleThumbResId: Int) : AbsAboutFragment() {
+    class AboutFragment(private val name: CharSequence?,
+                        private val iconResId: Int,
+                        private val desc: CharSequence?,
+                        private val thumbResId: Int) : AbsAboutFragment() {
         override val appThumbResource: Int
-            get() = exampleThumbResId
+            get() = thumbResId
 
         override val appName: CharSequence?
-            get() = exampleName
+            get() = name
 
         override val appDescription: CharSequence?
-            get() = exampleDesc
+            get() = desc
 
         override val appIconResource: Int
-            get() = exampleIconResId
+            get() = iconResId
 
     }
 
@@ -179,7 +179,7 @@ abstract class AbsTFLiteModelViewerActivity<Info: InferenceInfo, Results> : DevB
         sheetBehavior?.isHideable = false
 
         titleView = findViewById(R.id.bottom_sheet_title)
-        setExampleTitle(title)
+        setViewerTitle(title)
 
         val resultContainer: ViewGroup? = findViewById(R.id.bottom_sheet_result)
         resultContainer?.let {
@@ -266,11 +266,11 @@ abstract class AbsTFLiteModelViewerActivity<Info: InferenceInfo, Results> : DevB
         return true
     }
 
-    protected open fun getExampleTitle(): CharSequence {
+    protected open fun getViewerTitle(): CharSequence {
         return titleView?.text ?: title
     }
 
-    protected open fun setExampleTitle(title: CharSequence) {
+    protected open fun setViewerTitle(title: CharSequence) {
         titleView?.text = title
     }
 

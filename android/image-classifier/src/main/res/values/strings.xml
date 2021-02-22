@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name_release">application_name_</string>
     <string name="app_name_debug">@string/app_name_release</string>
+
+    <string name="app_desc">For TensorFlow Lite models enhanced with metadata, developers can use ML Model Binding to automatically generate wrapper classes based on the model metadata. By leveraging the technology, this app is built for a compatible image classification lite model with supported metadata.\n\nTo generate an app for your image classification model, please visit\n\thttps://github.com/dailystudio/tflite-model-viewer</string>
+
 </resources>

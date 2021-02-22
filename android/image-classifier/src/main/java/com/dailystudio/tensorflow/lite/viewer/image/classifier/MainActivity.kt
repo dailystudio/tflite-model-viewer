@@ -68,4 +68,9 @@ class MainActivity : AbsTFLiteModelViewerActivity<ImageInferenceInfo, List<Categ
     override fun getAboutThumbResource(): Int {
         return R.drawable.app_thumb
     }
+
+    override fun getViewerAppDesc(): CharSequence? {
+        return getString(R.string.app_desc)
+    }
+
 }
