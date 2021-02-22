@@ -7,7 +7,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.dailystudio.tensorflow.lite.viewer.image.classifier"
+        applicationId "com.dailystudio.tensorflow.lite.viewer.image.classifier.package_name_"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode Integer.parseInt(appVersionCode)

@@ -39,6 +39,8 @@ function squeezeAndLowerString() {
 app_name="TensorFlow Lite Viewer"
 apk_file="app/build/outputs/apk/debug/app-debug.apk"
 output_base_dir="./outputs/"
+lite_model_dir="src/main/ml"
+lite_model_fname="lite-model.tflite"
 
 while getopts :t:m:n:ihH opt; do
   case ${opt} in
@@ -79,6 +81,11 @@ if [ ! -d "${template}" ]; then
     exit_with_error
 fi
 
+if [ ! -f "${model}" ]; then
+    echo "[ERROR] lite model file [${template}] does NOT exist."
+    exit_with_error
+fi
+
 app_name="${app_name//\'/\\\\\'}"
 app_name="${app_name%%. *}"
 
@@ -101,3 +108,12 @@ echo "\`- package name:     ${package_name}"
 echo
 echo "---------------------------------------------------------------------------------------------"
 echo
+
+project_directory=${template}
+echo "[1] clean up workspace ... ${project_directory}"
+lite_model_dest="${project_directory}/${lite_model_dir}"
+rm ${lite_model_dest}/*.tflite 2> /dev/null
+git checkout ${template} 2> /dev/null
+
+echo "[2] copy lite model into workspace ... ${lite_model_dest}"
+cp ${model} ${lite_model_dest}/${lite_model_fname}
