@@ -276,25 +276,25 @@ abstract class AbsTFLiteModelViewerActivity<Info: InferenceInfo, Results> : DevB
 
     protected open fun createAboutFragment(): AbsAboutFragment {
         return AboutFragment(
-            getExampleName(),
-            getExampleIconResource(),
-            getExampleDesc(),
-            getExampleThumbResource())
+            getViewerAppName(),
+            getAboutIconResource(),
+            getViewerAppDesc(),
+            getAboutThumbResource())
     }
 
-    protected open fun getExampleThumbResource(): Int {
+    protected open fun getAboutThumbResource(): Int {
         return R.drawable.app_thumb
     }
 
-    protected open fun getExampleIconResource(): Int {
+    protected open fun getAboutIconResource(): Int {
         return R.mipmap.ic_launcher
     }
 
-    protected open fun getExampleName(): CharSequence? {
+    protected open fun getViewerAppName(): CharSequence? {
         return getString(R.string.default_app_name)
     }
 
-    protected open fun getExampleDesc(): CharSequence? {
+    protected open fun getViewerAppDesc(): CharSequence? {
         return getString(R.string.default_example_desc)
     }
 

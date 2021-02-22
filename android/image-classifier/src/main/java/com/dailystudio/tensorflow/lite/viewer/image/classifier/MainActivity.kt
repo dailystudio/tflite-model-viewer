@@ -57,4 +57,15 @@ class MainActivity : AbsTFLiteModelViewerActivity<ImageInferenceInfo, List<Categ
         }
     }
 
+    override fun getViewerAppName(): CharSequence? {
+        return getString(R.string.app_name)
+    }
+
+    override fun getAboutIconResource(): Int {
+        return R.mipmap.ic_launcher
+    }
+
+    override fun getAboutThumbResource(): Int {
+        return R.drawable.app_thumb
+    }
 }
