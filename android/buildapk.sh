@@ -35,24 +35,24 @@ function squeezeAndLowerString() {
   echo "${new_str}"
 }
 
-function modify_resources {
-    sed_str="s/application_name_/${app_name}/g"
-    files=`find . -name "strings.xml"`
-    for file in ${files}; do
+function modify_resources() {
+  sed_str="s/application_name_/${app_name}/g"
+  files=`find $1 -name "strings.xml"`
+  for file in ${files}; do
 #        echo "processing file: ${file}"
-        cat ${file} | perl -pe "${sed_str}" > ${file}.tmp
-        mv ${file}.tmp ${file}
-    done
+      cat ${file} | perl -pe "${sed_str}" > ${file}.tmp
+      mv ${file}.tmp ${file}
+  done
 }
 
-function modify_build_scripts {
-    sed_str="s/package_name_/${package_name//\//\\/}/g;"
-    files=`find . -name "build.gradle"`
-    for file in ${files}; do
+function modify_build_scripts() {
+  sed_str="s/package_name_/${package_name//\//\\/}/g;"
+  files=`find $1 -name "build.gradle"`
+  for file in ${files}; do
 #        echo "processing file: ${file}"
-        cat ${file} | perl -pe ${sed_str} > ${file}.tmp
-        mv ${file}.tmp ${file}
-    done
+      cat ${file} | perl -pe ${sed_str} > ${file}.tmp
+      mv ${file}.tmp ${file}
+  done
 }
 
 app_name="TensorFlow Lite Viewer"
@@ -138,8 +138,8 @@ echo "[2] copy lite model into workspace ... ${lite_model_dest}"
 cp ${model} ${lite_model_dest}/${lite_model_fname}
 
 echo "[3] modifying code ..."
-modify_resources
-modify_build_scripts
+modify_resources ${project_directory}
+modify_build_scripts ${project_directory}
 
 echo "[4] compling application ..."
 ./gradlew :${template}:assembleDebug
