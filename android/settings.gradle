@@ -1,2 +1,3 @@
+include ':object-detector'
 include ':tensorflow-lite-viewer'
 include ':image-classifier'
