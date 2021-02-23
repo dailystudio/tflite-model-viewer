@@ -56,10 +56,9 @@ function modify_build_scripts() {
 }
 
 app_name="TensorFlow Lite Viewer"
-apk_file="app/build/outputs/apk/debug/app-debug.apk"
-output_base_dir="./outputs/"
 lite_model_dir="src/main/ml"
 lite_model_fname="lite-model.tflite"
+output_base_dir="./outputs/"
 
 while getopts :t:m:n:ihH opt; do
   case ${opt} in
@@ -107,11 +106,7 @@ fi
 
 app_name="${app_name//\'/\\\\\'}"
 app_name="${app_name%%. *}"
-
 app_name_code=$(squeezeAndLowerString ${app_name})
-
-output_fname=${app_name}.apk
-output_file="${output_base_dir}/${template}/${output_fname}"
 package_name=`sed 's/=/_/g' <<< "${app_name_code}"`
 date=`date +%Y-%m-%dT%H:%M:%S`
 
@@ -129,17 +124,38 @@ echo "--------------------------------------------------------------------------
 echo
 
 project_directory=${template}
-echo "[1] clean up workspace ... ${project_directory}"
+echo "[1] cleaning up workspace ... ${project_directory}"
 lite_model_dest="${project_directory}/${lite_model_dir}"
 rm ${lite_model_dest}/*.tflite 2> /dev/null
 git checkout ${template} 2> /dev/null
 
-echo "[2] copy lite model into workspace ... ${lite_model_dest}"
+echo "[2] copying lite model into workspace ... ${lite_model_dest}"
+if [ ! -d "${lite_model_dest}" ]; then
+  mkdir -p ${lite_model_dest}
+fi
 cp ${model} ${lite_model_dest}/${lite_model_fname}
 
 echo "[3] modifying code ..."
 modify_resources ${project_directory}
 modify_build_scripts ${project_directory}
 
-echo "[4] compling application ..."
+build_file="${project_directory}/build/outputs/apk/debug/${template}-debug.apk"
+output_file="${output_base_dir}/${app_name_code}.apk"
+
+echo "[4] compiling application ..."
 ./gradlew :${template}:assembleDebug
+
+echo "[5] publishing application to ${output_base_dir}"
+if [ ! -d "${output_base_dir}" ]; then
+  mkdir -p ${output_base_dir}
+fi
+cp -af ${build_file} ${output_file}
+
+if [ "${install_at_once}" = true ]; then
+  echo "[6] installing application to device ..."
+
+  adb install -r ${output_file}
+fi
+
+echo "---------------------------------------------------------------------------------------------"
+echo
