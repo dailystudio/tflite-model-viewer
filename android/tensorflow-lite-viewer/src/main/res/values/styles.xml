@@ -29,6 +29,8 @@
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">start|center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
     </style>
 
     <style name="ResultItemValue" parent="ResultItem">
