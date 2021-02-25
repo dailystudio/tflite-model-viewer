@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import com.dailystudio.devbricksx.settings.*
 import com.dailystudio.devbricksx.utils.ResourcesCompatUtils
 import com.dailystudio.tensorflow.lite.viewer.R
+import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.support.model.Model
 import kotlin.math.roundToInt
 
@@ -13,37 +14,12 @@ open class InferenceSettingsFragment: AbsSettingsDialogFragment() {
     override fun createSettings(context: Context): Array<AbsSetting> {
         val settingsPrefs = getInferenceSettingsPrefs()
 
-        val devices = arrayOf(
-            SimpleRadioSettingItem(context,
-                Model.Device.CPU.toString(), R.string.label_cpu),
-            SimpleRadioSettingItem(context,
-                Model.Device.GPU.toString(), R.string.label_gpu),
-            SimpleRadioSettingItem(context,
-                Model.Device.NNAPI.toString(), R.string.label_nnapi)
-        )
-
-        val deviceSetting = object: RadioSetting<SimpleRadioSettingItem>(
-            context,
-            InferenceSettingsPrefs.PREF_DEVICE,
-            R.drawable.ic_setting_device,
-            R.string.setting_device,
-            devices) {
-            override val selectedId: String?
-                get() = settingsPrefs.device
-
-            override fun setSelected(selectedId: String?) {
-                selectedId?.let {
-                    settingsPrefs.device = it
-                }
-            }
-        }
-
-
         val threadSetting = object: SeekBarSetting(
             context,
             InferenceSettingsPrefs.PREF_NUMBER_OF_THREADS,
             R.drawable.ic_setting_threads,
-            R.string.setting_threads) {
+            R.string.setting_threads,
+            InferenceSettingsPrefs.instance.device != Model.Device.GPU.toString()) {
             override fun getMaxValue(context: Context): Float {
                 return InferenceSettings.MAX_NUM_OF_THREADS.toFloat()
             }
@@ -66,6 +42,38 @@ open class InferenceSettingsFragment: AbsSettingsDialogFragment() {
 
         }
 
+        val devices = mutableListOf(
+            SimpleRadioSettingItem(context,
+                Model.Device.CPU.toString(), R.string.label_cpu),
+        )
+
+        val compatibility = CompatibilityList()
+        if (compatibility.isDelegateSupportedOnThisDevice) {
+            devices.add(SimpleRadioSettingItem(context,
+                Model.Device.GPU.toString(), R.string.label_gpu))
+        }
+
+        devices.add(SimpleRadioSettingItem(context,
+            Model.Device.NNAPI.toString(), R.string.label_nnapi))
+
+        val deviceSetting = object: RadioSetting<SimpleRadioSettingItem>(
+            context,
+            InferenceSettingsPrefs.PREF_DEVICE,
+            R.drawable.ic_setting_device,
+            R.string.setting_device,
+            devices.toTypedArray()) {
+            override val selectedId: String?
+                get() = settingsPrefs.device
+
+            override fun setSelected(selectedId: String?) {
+                selectedId?.let {
+                    settingsPrefs.device = it
+                }
+
+                threadSetting.enabled = (selectedId != Model.Device.GPU.toString())
+            }
+        }
+
         return arrayOf(deviceSetting, threadSetting)
     }
 
@@ -74,7 +82,7 @@ open class InferenceSettingsFragment: AbsSettingsDialogFragment() {
     }
 
     open fun getInferenceSettingsPrefs(): InferenceSettingsPrefs {
-        return InferenceSettingsPrefs()
+        return InferenceSettingsPrefs.instance
     }
 
 }
