@@ -41,7 +41,7 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
             builder.setNumThreads(numOfThreads)
         }
 
-        Logger.debug("current model options: device = $device, numOfThreads = $numOfThreads")
+        Logger.debug("model options: device = $device, numOfThreads = $numOfThreads")
 
         return builder.build()
     }
@@ -97,7 +97,6 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
         when (changePrefName) {
             InferenceSettingsPrefs.PREF_DEVICE, InferenceSettingsPrefs.PREF_NUMBER_OF_THREADS -> {
                 GlobalScope.launch (Dispatchers.IO) {
-                    Logger.info("settings [$changePrefName] changed, old modle is deprecated")
                     model?.close()
                     model = null
                 }
