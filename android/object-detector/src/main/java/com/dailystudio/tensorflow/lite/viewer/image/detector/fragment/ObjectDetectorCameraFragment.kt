@@ -1,5 +1,6 @@
 package com.dailystudio.tensorflow.lite.viewer.image.detector.fragment
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.util.Log
@@ -70,10 +71,9 @@ class ObjectDetectorAnalyzer(rotation: Int, lensFacing: Int)
         }
     }
 
-    override fun analyzeFrame(
-        inferenceBitmap: Bitmap,
-        info: ImageInferenceInfo
-    ): List<Category>? {
+    override fun analyzeFrame(context: Context,
+                              inferenceBitmap: Bitmap,
+                              info: ImageInferenceInfo): List<Category>? {
         val tImage = TensorImage.fromBitmap(inferenceBitmap)
         val inputSize = tImage.width
 

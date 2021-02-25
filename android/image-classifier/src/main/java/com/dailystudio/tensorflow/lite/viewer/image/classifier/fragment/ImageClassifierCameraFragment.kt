@@ -1,7 +1,7 @@
 package com.dailystudio.tensorflow.lite.viewer.image.classifier.fragment
 
+import android.content.Context
 import android.graphics.Bitmap
-import com.dailystudio.devbricksx.GlobalContextWrapper
 import com.dailystudio.devbricksx.development.Logger
 import com.dailystudio.devbricksx.utils.ImageUtils
 import com.dailystudio.devbricksx.utils.MatrixUtils
@@ -46,21 +46,16 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
         return builder.build()
     }
 
-    private fun getClassifier(): LiteModel? {
-        return model ?: GlobalContextWrapper.context?.let {
-            LiteModel.newInstance(it, getModelOptions())
-        }
-    }
-
     @Synchronized
-    override fun analyzeFrame(inferenceBitmap: Bitmap,
-                              info: ImageInferenceInfo): List<Category>? {
-
+    override fun analyzeFrame(context: Context,
+                              inferenceBitmap: Bitmap,
+                              info: ImageInferenceInfo): List<Category> {
+        val classifier = model ?: LiteModel.newInstance(context, getModelOptions())
         val tImage = TensorImage.fromBitmap(inferenceBitmap)
 
-        val categories = getClassifier()?.process(tImage)?.probabilityAsCategoryList
+        val categories = classifier.process(tImage).probabilityAsCategoryList
 
-        categories?.sortByDescending {
+        categories.sortByDescending {
             it.score
         }
 

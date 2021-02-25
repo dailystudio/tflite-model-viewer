@@ -1,6 +1,7 @@
 package com.dailystudio.tensorflow.lite.viewer.image
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
 import android.util.Size
@@ -25,6 +26,7 @@ abstract class AbsTFLiteImageAnalyzer<Info: ImageInferenceInfo, Results> (privat
 
     @SuppressLint("UnsafeExperimentalUsageError")
     override fun analyze(image: ImageProxy) {
+        val context = GlobalContextWrapper.context ?: return
         var results: Results? = null
         val info: Info = createInferenceInfo().apply {
             imageSize = Size(image.width, image.height)
@@ -41,7 +43,7 @@ abstract class AbsTFLiteImageAnalyzer<Info: ImageInferenceInfo, Results> (privat
             inferenceBitmap?.let { bitmap ->
                 info.inferenceImageSize = Size(bitmap.width, bitmap.height)
 
-                results = analyzeFrame(bitmap, info)
+                results = analyzeFrame(context, bitmap, info)
             }
         }
         val end = System.currentTimeMillis()
@@ -101,7 +103,8 @@ abstract class AbsTFLiteImageAnalyzer<Info: ImageInferenceInfo, Results> (privat
 
     abstract fun createInferenceInfo(): Info
 
-    abstract fun analyzeFrame(inferenceBitmap: Bitmap,
+    abstract fun analyzeFrame(context: Context,
+                              inferenceBitmap: Bitmap,
                               info: Info): Results?
 
 }
