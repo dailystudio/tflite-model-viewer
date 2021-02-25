@@ -24,31 +24,32 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
 
     private var model: LiteModel? = null
 
-    private fun getClassifier(): LiteModel? {
-        if (model == null) {
-            model = GlobalContextWrapper.context?.let {
-                val deviceStr = InferenceSettingsPrefs.instance.device
-                val numOfThreads = InferenceSettingsPrefs.instance.numberOfThreads
+    private fun getModelOptions(): Model.Options {
+        val deviceStr = InferenceSettingsPrefs.instance.device
+        val numOfThreads = InferenceSettingsPrefs.instance.numberOfThreads
 
-                val device = try {
-                    Model.Device.valueOf(deviceStr)
-                } catch (e: Exception) {
-                    Logger.error("failed to parse device from [${deviceStr}]: $e")
-                    Model.Device.CPU
-                }
-
-                val builder = Model.Options.Builder()
-                    .setDevice(device)
-                if (device != Model.Device.GPU) {
-                    builder.setNumThreads(numOfThreads)
-                }
-
-                Logger.info("create model instance: device = $device, numOfThreads = $numOfThreads")
-                LiteModel.newInstance(it, builder.build())
-            }
+        val device = try {
+            Model.Device.valueOf(deviceStr)
+        } catch (e: Exception) {
+            Logger.error("failed to parse device from [${deviceStr}]: $e")
+            Model.Device.CPU
         }
 
-        return model
+        val builder = Model.Options.Builder()
+            .setDevice(device)
+        if (device != Model.Device.GPU) {
+            builder.setNumThreads(numOfThreads)
+        }
+
+        Logger.debug("current model options: device = $device, numOfThreads = $numOfThreads")
+
+        return builder.build()
+    }
+
+    private fun getClassifier(): LiteModel? {
+        return model ?: GlobalContextWrapper.context?.let {
+            LiteModel.newInstance(it, getModelOptions())
+        }
     }
 
     @Synchronized
