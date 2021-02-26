@@ -22,7 +22,8 @@ import java.lang.Exception
 class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
     : AbsTFLiteImageAnalyzer<ImageInferenceInfo, List<Category>>(rotation, lensFacing) {
 
-    private var model: LiteModel? = null
+    private var classifier: LiteModel? = null
+    private var lock = Object()
 
     private fun getModelOptions(): Model.Options {
         val deviceStr = InferenceSettingsPrefs.instance.device
@@ -46,17 +47,24 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
         return builder.build()
     }
 
-    @Synchronized
     override fun analyzeFrame(context: Context,
                               inferenceBitmap: Bitmap,
-                              info: ImageInferenceInfo): List<Category> {
-        val classifier = model ?: LiteModel.newInstance(context, getModelOptions())
+                              info: ImageInferenceInfo): List<Category>? {
         val tImage = TensorImage.fromBitmap(inferenceBitmap)
 
-        val categories = classifier.process(tImage).probabilityAsCategoryList
+        var categories: MutableList<Category>? = null
 
-        categories.sortByDescending {
-            it.score
+        synchronized(lock) {
+            classifier = classifier ?:
+                    LiteModel.newInstance(
+                        context, getModelOptions())
+            Logger.debug("[CC] classifier[${classifier.hashCode()}] is being used.")
+
+            categories = classifier?.process(tImage)?.probabilityAsCategoryList
+
+            categories?.sortByDescending {
+                it.score
+            }
         }
 
         return categories
@@ -85,15 +93,18 @@ class ImageClassifierAnalyzer(rotation: Int, lensFacing: Int)
         )
     }
 
-    @Synchronized
     override fun onInferenceSettingsChange(changePrefName: String) {
         super.onInferenceSettingsChange(changePrefName)
 
         when (changePrefName) {
             InferenceSettingsPrefs.PREF_DEVICE, InferenceSettingsPrefs.PREF_NUMBER_OF_THREADS -> {
                 GlobalScope.launch (Dispatchers.IO) {
-                    model?.close()
-                    model = null
+                    synchronized(lock) {
+                        classifier?.close()
+                        Logger.debug("[CC] classifier[${classifier.hashCode()}] is closed.")
+
+                        classifier = null
+                    }
                 }
             }
         }
