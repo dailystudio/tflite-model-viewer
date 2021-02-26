@@ -8,6 +8,7 @@ function print_usage {
   echo ""
   echo "    -t                            TensorFlow Lite project template"
   echo "    -m                            TensorFlow Lite model file"
+  echo "    -n                            specify application name"
   echo "    -i                            install apk at once on connected device"
   echo "    -h:                           display this message"
   echo
